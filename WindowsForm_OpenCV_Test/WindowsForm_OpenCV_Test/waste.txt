@@ -1,0 +1,87 @@
+﻿            int Hmin = trackBar_Hmin.Value;
+            int Hmax = trackBar_Hmax.Value;
+
+            int Smin = trackBar_Smin.Value;
+            int Smax = trackBar_Smax.Value;
+
+            int Vmin = trackBar_Vmin.Value;
+            int Vmax = trackBar_Vmax.Value;
+
+
+            label_Hmin.Text = Hmin.ToString();
+            label_Hmax.Text = Hmax.ToString();
+
+            label_Smin.Text = Smin.ToString();
+            label_Smax.Text = Smax.ToString();
+
+            label_Vmin.Text = Vmin.ToString();
+            label_Vmax.Text = Vmax.ToString();
+
+
+
+
+            /*
+
+            //drawing with 2 points and lines
+            if (countorsGreen.Size > 0)
+            {
+                if (_prevPoint.X == 0 && _prevPoint.Y == 0)
+                {
+                    _prevPoint = new Point(countorsGreen[0][0].X, countorsGreen[0][0].Y);
+                }
+                else
+                {
+                    Point currentPoint = new Point(countorsGreen[0][0].X, countorsGreen[0][0].Y);
+                    _imgMain.Draw(new LineSegment2D(_prevPoint, currentPoint), new Bgr(255, 0, 0), 4);
+
+                    _prevPoint = currentPoint;
+                }
+            }
+            else
+            {
+                _prevPoint.X = 0;
+                _prevPoint.Y = 0;
+                ;
+            }
+
+
+
+            //ERASE WITH BLUE
+            if (countorsBlue.Size > 0)
+            {
+                _imgMain.Draw(countorsBlue, -1, new Bgr(255, 255, 255), -1, LineType.EightConnected, hierarchyBlue);
+            }
+            
+
+            */
+
+
+
+
+
+
+
+
+            var imgMaskOrange = img.InRange(new Hsv(0, 83, 120), new Hsv(10, 190, 255)); // - ORANGE
+            var imgMaskBlue = img.InRange(new Hsv(98, 93, 155), new Hsv(120, 255, 255));  // - BLUE
+            //var imgMask = img.InRange(new Hsv(Hmin, Smin, Vmin), new Hsv(Hmax, Smax, Vmax));
+
+            imgMaskBlue = imgMaskBlue.Erode(1);
+            imgMaskBlue = imgMaskBlue.Dilate(2);
+
+            imgMaskOrange = imgMaskOrange.Erode(1);
+
+
+            VectorOfVectorOfPoint countorsBlue = new VectorOfVectorOfPoint();
+            Mat hierarchyBlue = new Mat();
+            CvInvoke.FindContours(imgMaskBlue, countorsBlue, hierarchyBlue, RetrType.Tree, ChainApproxMethod.ChainApproxSimple);
+
+            VectorOfVectorOfPoint countorsOrange = new VectorOfVectorOfPoint();
+            Mat hierarchyOrange = new Mat();
+            CvInvoke.FindContours(imgMaskOrange, countorsOrange, hierarchyOrange, RetrType.Tree, ChainApproxMethod.ChainApproxSimple);
+
+
+
+            //VectorOfVectorOfPoint countorsGreen = new VectorOfVectorOfPoint();
+            //Mat hierarchyGreen = new Mat();
+            //CvInvoke.FindContours(imgMaskGreen, countorsGreen, hierarchyGreen, RetrType.Tree, ChainApproxMethod.ChainApproxSimple);
